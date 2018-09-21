@@ -1,89 +1,139 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <title>VueJS component for Mapbox GL</title>
+<html>
+<head>
+<meta charset='utf-8' />
+<title>Display a map</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.css' rel='stylesheet' />
+<style>
+body { margin:0; padding:0; }
+#map { position:absolute; top:0; bottom:0; width:100%; }
+</style>
+</head>
+<body>
+ <div id='map'></div>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoidmluZGljb2tpbWJlciIsImEiOiJjam1icHVvdWgwMmVjM3Fuem9qZ3Y3ZmFmIn0.AhbSVa_fIovmsv7DG6nuTA';
+var map = new mapboxgl.Map({
+container: 'map',
+ style: 'mapbox://styles/mapbox/light-v9',
+      center: [-4.16, 51.6809],
+      zoom: 9,
+      minZoom: 5,
+      maxZoom: 15
+    });
 
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-    <link href="https://api.mapbox.com/mapbox-gl-js/v0.41.0/mapbox-gl.css" rel="stylesheet" />
+    map.on('load', function() {
+    map.addSource("source_circle_500", {
+    "type": "geojson",
+    "data":{
+    "type": "FeatureCollection",
+    "features": [
+    {
+    "type": "Feature",
+    "properties": {},
+    "geometry": {
+    "type": "Point",
+    "coordinates": [-4.159097671508788, 51.676068081248125],
+    "colour": "blue"
+     },
+    },
+    {
+    "type": "Feature",
+    "properties": {},
+    "geometry": {
+    "type": "Point",
+    "coordinates": [-4.1275763511657715,51.67891548595669]
+    
+  }
+   }]
+   }
+      });
+     map.addLayer({
+     "id": "circle500",
+     "type": "circle",
+     "source": "source_circle_500",
+     "paint": {
+     "circle-radius": {
+     stops: [
+     [5, 1],
+     [15, 124]
+    ],
+     base: 2},
+       "circle-color": "red",
+       "circle-opacity": 0.6
+     }
+    });
+  });
+  
+    map.on('load', function() {
+    map.addSource("source_circle_400", {
+    "type": "geojson",
+    "data":{
+    "type": "FeatureCollection",
+    "features": [
+    {
+    "type": "Feature",
+    "properties": {},
+    "geometry": {
+    "type": "Point",
+    "coordinates" : [ -4.143819808959961,51.68665845678628],
+    }
+   }]
+   }
+      });
+     map.addLayer({
+     "id": "circle400",
+     "type": "circle",
+     "source": "source_circle_400",
+     "paint": {
+     "circle-radius": {
+     stops: [
+     [5, 1],
+     [15, 124]
+    ],
+     base: 2},
+       "circle-color": "blue",
+       "circle-opacity": 0.6
+     }
+      });
+    });
+    map.on('load', function() {
+    map.addSource("source_circle_600", {
+    "type": "geojson",
+    "data":{
+    "type": "FeatureCollection",
+    "features": [
+    {
+    "type": "Feature",
+    "properties": {},
+    "geometry": {
+    "type": "Point",
+    "coordinates" : [ -4.1275763511657715,51.67891548595669],
+    }
+   }]
+   }
+      });
+     map.addLayer({
+     "id": "circle600",
+     "type": "circle",
+     "source": "source_circle_600",
+     "paint": {
+     "circle-radius": {
+     stops: [
+     [5, 1],
+     [15, 124]
+    ],
+     base: 2},
+       "circle-color": "dark green",
+       "circle-opacity": 0.6
+     }
+      });
+    });
+  
+  </script>
 
-    <script src="https://unpkg.com/vue"></script>
-    <script src="dist/vue2-mapboxgl-component.min.js"></script>
+</body>
 
-    <style>
-      body {
-        margin: 0;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="app">
-      <v-mapboxgl
-        :id="mapId"
-        :access-token="mapAccessToken"
-        :height="mapHeight"
-        :width="mapWidth"
-        :gl-center="mapCenter"
-        :gl-controls="mapControls"
-        :gl-zoom="mapZoom"
-        :gl-style="mapStyle"
-        :gl-bearing="mapBearing"
-        :gl-pitch="mapPitch"
-        :gl-popups="mapPopups">
-      </v-mapboxgl>
-    </div>
-
-    <script>
-      Vue.config.debug = true
-
-      new Vue({
-        el: '#app',
-        components: {
-          vMapboxgl: vMapboxgl
-        },
-        data () {
-          return {
-            mapId: 'map',
-            mapAccessToken: 'pk.eyJ1IjoibmFpbWlrYW4iLCJhIjoiY2lraXJkOXFjMDA0OXdhbTYzNTE0b2NtbiJ9.O64XgZQHNHcV2gwNLN2a0Q',
-            mapHeight: window.innerHeight,
-            mapWidth: window.innerWidth,
-            mapCenter: {
-              autodiscover: true
-            },
-            mapControls: {
-              navigation: {
-                enabled: true,
-                options: {}
-              }
-            },
-            mapZoom: {
-              value: 8
-            },
-            mapStyle: 'mapbox://styles/mapbox/streets-v9',
-            mapBearing: {
-              value: 40
-            },
-            mapPitch: {
-              value: 60
-            },
-            mapPopups: [
-              {
-                coordinates: [-2, 41],
-                message: 'Hi popup!'
-                // message: '<h3>Title</h3><v-mapboxgl :access-token="\'pk.eyJ1IjoibmFpbWlrYW4iLCJhIjoiY2lraXJkOXFjMDA0OXdhbTYzNTE0b2NtbiJ9.O64XgZQHNHcV2gwNLN2a0Q\'" :width="150" :height="150"></v-mapboxgl>'
-              }
-            ]
-          }
-        },
-        methods: {
-          handleResize (event) {
-            this.mapHeight = event.currentTarget.innerHeight
-            this.mapWidth = event.currentTarget.innerWidth
-          }
-        },
-        mounted () {
-          window.addEventListener('resize', this.handleResize)
-        }
-      })
-    </script>
-  </body>
 </html>
